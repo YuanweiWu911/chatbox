@@ -94,6 +94,7 @@ chatbox/
 │   ├── test_functions.py
 │   └── test_main.py
 ├── .env
+├── start
 ├── requirements.txt
 ├── test_functions.py
 ├── test_main.py
