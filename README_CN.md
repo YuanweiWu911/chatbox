@@ -38,7 +38,7 @@ pip install -r requirements.txt
 ### 3.4 配置环境变量
 在项目根目录下创建一个 `.env` 文件，并添加以下内容：
 ```plaintext
-REDIS_URL=redis://localhost:6379/0
+REDIS_URL=redis://localhost:6379
 SERPER_API_KEY=your_serper_api_key
 PROXY_URL=your_proxy_url  # 如果需要代理，可设置该值
 ```
