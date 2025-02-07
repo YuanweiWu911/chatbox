@@ -110,6 +110,7 @@ chatbox/
   - `gui.py`：使用 Tkinter 构建的图形用户界面。
 - `tests/`：包含测试代码。
 - `.env`：环境变量配置文件。
+- `start`：bash script同时启动前后端程序。
 - `requirements.txt`：项目依赖文件。
 
 ## 6. 错误处理与日志记录
