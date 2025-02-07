@@ -1,6 +1,8 @@
 # Chat Application README
 
 ## 1. Project Overview
+### A chatbox uses local LLM models deepseek-r1, together with API searching engineer to find newest informations for the local LLM.
+
 This chat application combines a FastAPI backend service with a graphical user interface (GUI) built using Tkinter, providing users with a convenient interactive environment. Users can enter queries in the GUI. The application first checks the Redis cache for corresponding results. If not found, it searches the web for relevant information, then invokes the local Ollama model to generate responses, and caches the results for future queries.
 
 ## 2. Features
