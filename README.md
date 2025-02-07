@@ -110,6 +110,7 @@ chatbox/
 - `tests/`: Contains test code.
 - `.env`: Environment variable configuration file.
 - `requirements.txt`: Project dependency file.
+- `start`: bash script to start both frontend gui and backend task.
 
 ## 6. Error Handling and Logging
 
