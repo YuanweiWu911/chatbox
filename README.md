@@ -69,7 +69,11 @@ Run the Python file containing the GUI code, usually by directly executing the f
 python gui/gui.py  # Assuming the GUI code file is named gui.py and located in the gui directory
 ```
 
-### 4.3 Interact with the Application
+### 4.3 Start both the Backend Service and the Frontend GUI
+```bash
+./start
+```
+### 4.4 Interact with the Application
 - Enter your query in the input box of the GUI.
 - Click the "Send Query" button to send the query request.
 - View the user queries and bot responses displayed in the chat area.

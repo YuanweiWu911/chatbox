@@ -68,7 +68,13 @@ uvicorn app.main:app --reload --port 8000
 python gui/gui.py  # 假设 GUI 代码文件名为 gui.py 且位于 gui 目录下
 ```
 
-### 4.3 与应用交互
+### 4.3  同时启动前端 GUI和后端服务
+```bash
+```bash
+./start
+```
+
+### 4.4 与应用交互
 - 在 GUI 界面的输入框中输入查询内容。
 - 点击 “Send Query” 按钮发送查询请求。
 - 查看聊天区域显示的用户查询和机器人回复。
