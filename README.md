@@ -60,7 +60,7 @@ Make sure the Ollama service is running and listening on the `http://localhost:1
 
 ### 4.1 Start the Backend Service
 ```bash
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --port 8000
 ```
 
 ### 4.2 Start the Frontend GUI

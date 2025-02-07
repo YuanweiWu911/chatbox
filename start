@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# 检查是否在 chatbox 目录下
+current_dir=$(basename "$(pwd)")
+if [ "$current_dir" != "chatbox" ]; then
+    echo "请在 chatbox 目录下运行此脚本。"
+    exit 1
+fi
+
+# 激活虚拟环境
+env_dir="venv"
+if [ -d "$env_dir" ]; then
+    source "$env_dir/bin/activate"
+    if [ $? -ne 0 ]; then
+        echo "无法激活虚拟环境 $env_dir，请检查。"
+        exit 1
+    fi
+else
+    echo "未找到虚拟环境目录 $env_dir，请检查。"
+    exit 1
+fi
+
+# 检查端口 8000 是否被占用
+port=8000
+is_port_in_use=$(netstat -tulpn | grep ":$port")
+
+if [ -n "$is_port_in_use" ]; then
+    # 提取占用端口的进程 ID
+    pid=$(echo "$is_port_in_use" | awk '{print $7}' | cut -d'/' -f1)
+    echo "端口 $port 已被进程 $pid 占用，正在终止该进程..."
+    kill -9 $pid
+    if [ $? -eq 0 ]; then
+        echo "进程 $pid 已成功终止。"
+    else
+        echo "无法终止进程 $pid，请手动检查并终止。"
+        deactivate
+        exit 1
+    fi
+fi
+
+# 启动后端服务
+uvicorn app.main:app --reload --port $port &
+backend_pid=$!
+
+# 等待一段时间，确保后端服务启动
+sleep 5
+
+# 启动前端脚本
+python3 gui/gui.py
+
+# 当前端脚本退出时，终止后端服务
+kill $backend_pid
+
+# 退出虚拟环境
+deactivate
+

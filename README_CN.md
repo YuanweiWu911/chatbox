@@ -59,7 +59,7 @@ redis-server
 
 ### 4.1 启动后端服务
 ```bash
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --port 8000
 ```
 
 ### 4.2 启动前端 GUI
