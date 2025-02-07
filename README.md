@@ -1,198 +1,124 @@
-Sure! Below is a **User Manual** for using the FastAPI-based chat application from the command line. This manual explains how to interact with your app, run it, and make requests via `curl` or other tools.
+# Chat Application README
 
----
+## 1. Project Overview
+This chat application combines a FastAPI backend service with a graphical user interface (GUI) built using Tkinter, providing users with a convenient interactive environment. Users can enter queries in the GUI. The application first checks the Redis cache for corresponding results. If not found, it searches the web for relevant information, then invokes the local Ollama model to generate responses, and caches the results for future queries.
 
-# **ChatBox FastAPI User Manual**
+## 2. Features
 
-## **Introduction**
-The ChatBox FastAPI application allows you to interact with a chatbot that fetches information from the web and generates responses using a local AI model. The application leverages Redis for caching, which helps improve performance by storing previous responses.
+### 2.1 Backend Features
+- **Caching Mechanism**: Utilizes Redis as a cache to effectively improve query efficiency and reduce the overhead of repeated queries.
+- **Web Search**: Performs web searches using the Serper API to accurately obtain relevant web page links.
+- **Content Parsing**: Intelligently parses the content of the searched web pages to extract useful information.
+- **Model Invocation**: Calls the local Ollama model to generate professional responses.
 
-This manual provides instructions on how to run the application and interact with it using the command line.
+### 2.2 Frontend Features
+- **Graphical User Interface (GUI)**: Built with Tkinter, it offers an intuitive and user - friendly interface for users to input queries and view responses.
+- **Conversation Display**: Clearly shows user queries and bot responses, distinguishing different types of content.
+- **Error Handling**: Displays corresponding error message boxes when the input is empty, there is a network connection failure, or the server returns an error.
 
----
+## 3. Installation Steps
 
-## **1. Prerequisites**
-
-Before using the ChatBox app, ensure the following:
-
-- **Redis** is installed and running.
-- **Python 3.10+** is installed.
-- Dependencies are installed from `requirements.txt`.
-
-### **Installing Redis**
-To install Redis on your system:
-
-- **Ubuntu/Debian**:
-  ```bash
-  sudo apt update
-  sudo apt install redis-server
-  ```
-
-- **macOS**:
-  ```bash
-  brew install redis
-  ```
-
-### **Setting Up the Environment**
-
-1. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. **Set up your environment**:
-   - Create a `.env` file in the root of your project if it doesn't exist, and set your Redis URL and other environment variables:
-   
-   ```env
-   REDIS_URL=redis://localhost:6379
-   SERPER_API_KEY=your_serper_api_key
-   ```
-
----
-
-## **2. Running the Application**
-
-### **Start the FastAPI Application**
-1. **Run the app with Uvicorn**:
-
-   Open a terminal and run the following command to start the application:
-   
-   ```bash
-   uvicorn app.main:app --reload --port 8000
-   ```
-
-   This starts the FastAPI server at `http://localhost:8000`. The `--reload` flag allows the server to auto-reload on code changes.
-
-2. **Verify that the application is running**:
-   
-   Open your browser and navigate to `http://localhost:8000/docs`. This will open the **Swagger UI** documentation, where you can test the API interactively.
-
----
-
-## **3. Interacting with the API (Command Line)**
-
-You can interact with the ChatBox app through the `/chat` endpoint, which accepts POST requests with a `query` parameter.
-
-### **Making Requests with `curl`**
-
-Use `curl` to send a POST request to the FastAPI app.
-
-#### **Basic Chat Request**
-
-1. Open a terminal and use the following `curl` command to send a chat query:
-
-   ```bash
-   curl -X 'POST' \
-     'http://localhost:8000/chat' \
-     -H 'Content-Type: application/json' \
-     -d '{"query": "What is FastAPI?"}'
-   ```
-
-   **Response Example**:
-   ```json
-   {
-     "response": "FastAPI is a modern, fast (high-performance) web framework for building APIs with Python 3.7+."
-   }
-   ```
-
-2. **Cached Response**:
-   If the query was previously asked and cached in Redis, the cached response will be returned directly, saving time.
-
-   Example of a cached response:
-   ```json
-   {
-     "response": "FastAPI is a modern web framework for building APIs."
-   }
-   ```
-
----
-
-## **4. Error Handling**
-
-The application uses HTTP exceptions to handle errors. The most common errors are:
-
-- **500 Internal Server Error**: This occurs when an error happens on the server side, like failing to fetch search results or generate a response.
-  
-  **Example response**:
-  ```json
-  {
-    "detail": "Internal Server Error: Unable to connect to Serper API"
-  }
-  ```
-
-- **422 Unprocessable Entity**: This occurs when the request payload is missing or has invalid data.
-  
-  **Example response**:
-  ```json
-  {
-    "detail": "Query parameter is required"
-  }
-  ```
-
----
-
-## **5. Example Error Cases**
-
-1. **Search Error Example**:
-   If the search function fails, such as when the external API cannot be reached:
-
-   **Example Request**:
-   ```bash
-   curl -X 'POST' \
-     'http://localhost:8000/chat' \
-     -H 'Content-Type: application/json' \
-     -d '{"query": "What is ChatGPT?"}'
-   ```
-
-   **Example Response** (if the search API fails):
-   ```json
-   {
-     "detail": "Search error: Search API not reachable"
-   }
-   ```
-
-2. **Cache Issue Example**:
-   If there's a problem with the Redis server or connection:
-
-   **Example Response** (when cache access fails):
-   ```json
-   {
-     "detail": "Cache error: Unable to connect to Redis"
-   }
-   ```
-
----
-
-## **6. Stopping the Application**
-
-To stop the application, press `CTRL+C` in the terminal where the app is running. This will gracefully shut down the FastAPI server.
-
----
-
-## **7. Additional Configuration (Optional)**
-
-### **Changing Redis Connection URL**
-If you want to connect to a different Redis instance (e.g., using a password or a remote server), update the `REDIS_URL` in the `.env` file.
-
-Example:
-```env
-REDIS_URL=redis://:your_password@your_redis_host:6379
+### 3.1 Clone the Repository
+```bash
+git clone https://github.com/YuanweiWu911/chatbox.git
+cd chatbox
 ```
 
----
+### 3.2 Create and Activate a Virtual Environment (Optional but Recommended)
+```bash
+python -m venv chatbox
+source chatbox/bin/activate  # For Linux/Mac
+.\chatbox\Scripts\activate  # For Windows
+```
 
-## **8. Troubleshooting**
+### 3.3 Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-- **Redis connection issue**: Make sure Redis is installed and running on your machine. Use the `redis-cli` command to connect to Redis and check if it¡¯s available.
-  
-- **API Errors**: Check the FastAPI application logs for more detailed error messages. You can run the app with `uvicorn app.main:app --reload --port 8000 --log-level debug` to see more detailed logs.
+### 3.4 Configure Environment Variables
+Create a `.env` file in the project root directory and add the following content:
+```plaintext
+REDIS_URL=redis://localhost:6379/0
+SERPER_API_KEY=your_serper_api_key
+PROXY_URL=your_proxy_url  # Set this value if a proxy is required
+```
+Replace `your_serper_api_key` with your own Serper API key, and `your_proxy_url` with the actual proxy address (leave it blank if no proxy is needed).
 
----
+### 3.5 Start the Redis Service
+Ensure that the Redis service is started. You can start Redis using the following command:
+```bash
+redis-server
+```
 
-## **9. Conclusion**
+### 3.6 Start the Ollama Service
+Make sure the Ollama service is running and listening on the `http://localhost:11434` port.
 
-You're now ready to use the ChatBox FastAPI app! This user manual covered how to run the app, make requests via the command line, handle common errors, and configure the app for different environments.
+## 4. Usage
 
-For any issues or questions, refer to the logs or consult the FastAPI documentation at [https://fastapi.tiangolo.com](https://fastapi.tiangolo.com).
+### 4.1 Start the Backend Service
+```bash
+uvicorn app.main:app --reload
+```
 
-Let me know if you need further assistance! ??
+### 4.2 Start the Frontend GUI
+Run the Python file containing the GUI code, usually by directly executing the file:
+```bash
+python gui/gui.py  # Assuming the GUI code file is named gui.py and located in the gui directory
+```
+
+### 4.3 Interact with the Application
+- Enter your query in the input box of the GUI.
+- Click the "Send Query" button to send the query request.
+- View the user queries and bot responses displayed in the chat area.
+
+## 5. Code Structure
+```plaintext
+chatbox/
+├── app/
+│   ├── __init__.py
+│   ├── cache.py
+│   ├── main.py
+│   ├── parser.py
+│   └── search.py
+├── gui/
+│   └── gui.py
+├── tests/
+│   ├── test_functions.py
+│   └── test_main.py
+├── .env
+├── requirements.txt
+├── test_functions.py
+├── test_main.py
+└── README.md
+```
+- `app/`: Contains the core backend code of the application.
+  - `__init__.py`: Marks the directory as a Python package.
+  - `cache.py`: Implements the Redis cache management function.
+  - `main.py`: The main entry file of the application, defining the FastAPI application and routes.
+  - `parser.py`: Responsible for parsing web page content.
+  - `search.py`: Performs web searches through the Serper API.
+- `gui/`: Contains the frontend GUI code.
+  - `gui.py`: A graphical user interface built using Tkinter.
+- `tests/`: Contains test code.
+- `.env`: Environment variable configuration file.
+- `requirements.txt`: Project dependency file.
+
+## 6. Error Handling and Logging
+
+### 6.1 Backend
+The application uses Python's `logging` module for logging. All error messages and important events are recorded in the console for easy debugging and monitoring.
+
+### 6.2 Frontend
+In the GUI, when the input is empty, there is a network connection failure, or the server returns an error, corresponding error message boxes will pop up to help users understand the problem in a timely manner.
+
+## 7. Notes
+- Ensure that your Serper API key is valid; otherwise, the web search function will not work properly.
+- Make sure the Redis service and Ollama service are running normally; otherwise, the caching and model invocation functions will be affected.
+- If you modify the running port of the backend service, you need to modify the URL of the request sent in the GUI code accordingly.
+
+## 8. Contribution
+If you want to contribute to this project, please submit a Pull Request or raise an Issue.
+
+## 9. License
+This project is licensed under the [Specific License Name]. Please refer to the `LICENSE` file for detailed information.
